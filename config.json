@@ -1,0 +1,26 @@
+{
+    "DatasetGeneratorParameters": {
+        "min_temperature": 65,
+        "max_temperature": 75,
+        "min_humidity": 45,
+        "max_humidity": 55,
+        "min_sound_volume": 55,
+        "max_sound_volume": 65,
+        "duration_in_seconds": 3000,
+        "step_in_seconds": 1,
+        "anomaly_rate": 0.5
+    },
+    "DatasetPaths": {
+        "generated_data_path": "./datasets/generated_data.csv",
+        "preprocessed_data_path": "./datasets/preprocessed_data.csv"
+    },
+    "DataPerprocessorParameters": {
+        "path_to_scaler": "./models/scaler.pkl"
+    },
+    "AnomalyClassifierParameters": {
+        "test_size": 0.3,
+        "random_state_split": 0,
+        "logistic_regression_path": "./models/logistic_regression",
+        "logistic_regression_random_state": 0
+    }
+}

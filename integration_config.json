@@ -1,0 +1,14 @@
+{
+    "CharacteristicLimits": {
+        "min_temperature": 65,
+        "max_temperature": 75,
+        "min_humidity": 45,
+        "max_humidity": 55,
+        "min_sound_volume": 55,
+        "max_sound_volume": 65
+    },
+    "ModelsPaths": {
+        "path_to_scaler": "./models/scaler.pkl",
+        "logistic_regression_path": "./models/logistic_regression/logistic_regression.pkl"
+    }
+}
