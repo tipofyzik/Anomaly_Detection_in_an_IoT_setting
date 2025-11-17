@@ -202,7 +202,7 @@ def predict_single(record: SensorRecord):
         ANOMALIES.inc()
 
     return {
-        "input": record.dict(),
+        "input": record.model_dump(),
         "is_anomaly": bool(flags[0]),
         "anomaly_score": float(scores[0]),
         "probabilities": {"class_0": probs[0][0], "class_1": probs[0][1]},

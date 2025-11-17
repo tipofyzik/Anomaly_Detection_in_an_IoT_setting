@@ -19,7 +19,10 @@ Usage:
 
 import time, requests, random
 
+predict_batch = False
 URL = "http://localhost:8000/predict"
+if predict_batch:
+    URL = "http://localhost:8000/predict_batch"
 
 def generate_random_payload() -> dict[str, float]:
     """
@@ -50,6 +53,8 @@ def main(stream_interval: float = 0.5) -> None:
     """
     while True:
         payload = generate_random_payload()
+        if predict_batch:
+            payload = {"records": [payload]}
         try:
             response = requests.post(URL, json=payload, timeout=5)
             print(response.json())
