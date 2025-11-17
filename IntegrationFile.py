@@ -226,7 +226,7 @@ def predict_batch(payload: BatchInput):
     REQUESTS.inc()
     start = time.time()
     try:
-        rows = [r.dict() for r in payload.records]
+        rows = [r.model_dump() for r in payload.records]
         new_data = pd.DataFrame(rows)
         preprocessed_data = preprocess_new_data(new_data, scaler)
         flags, scores, probs = run_inference(model = logistic_regression, 
