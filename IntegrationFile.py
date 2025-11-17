@@ -93,9 +93,9 @@ def any_values_beyond_range(table_row: pd.core.series.Series) -> bool:
     if any(delta < 0 for delta in [temperature_delta_pos, temperature_delta_neg, 
                                         sound_delta_pos, sound_delta_neg, 
                                         humidity_delta_pos, humidity_delta_neg]):
-        return 1
+        return True
     else:
-        return 0
+        return False
 
 def clean_new_data(dataset: pd.DataFrame, features: list[str]) -> pd.DataFrame:
     """
@@ -135,7 +135,7 @@ def preprocess_new_data(new_samples_dataset: pd.DataFrame, scaler) -> pd.DataFra
     """
     feature_names = ["temperature", "sound_volume", "humidity"]
     cleaned_data = clean_new_data(dataset = new_samples_dataset, features = feature_names)
-    scaled_data = scaler.fit_transform(cleaned_data[feature_names])
+    scaled_data = scaler.transform(cleaned_data[feature_names])
     preprocessed_data = pd.DataFrame(scaled_data, columns=feature_names)
     preprocessed_data["is_beyond_range"] = new_samples_dataset.apply(any_values_beyond_range, axis = 1)
     return preprocessed_data
