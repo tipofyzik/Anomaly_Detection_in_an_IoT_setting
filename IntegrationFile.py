@@ -186,7 +186,7 @@ def predict_single(record: SensorRecord):
     REQUESTS.inc()
     start = time.time()
     try:
-        new_data = pd.DataFrame([record.dict()])
+        new_data = pd.DataFrame([record.model_dump()])
         preprocessed_data = preprocess_new_data(new_data, scaler)
         flags, scores, probs = run_inference(model = logistic_regression, 
                                              preprocessed_data = preprocessed_data)
