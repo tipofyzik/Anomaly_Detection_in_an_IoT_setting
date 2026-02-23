@@ -166,7 +166,12 @@ def run_inference(model, preprocessed_data: np.ndarray):
     return flags, scores, probs.tolist()
 
 # ----- ENDPOINTS -----
-@app.post("/predict")
+@app.post("/predict",
+        responses={
+        400: {"description": "Invalid input data"},
+        500: {"description": "Internal server error"}
+    }
+)
 def predict_single(record: SensorRecord):
     """
     Predicts whether a single sensor record is anomalous.
@@ -209,7 +214,12 @@ def predict_single(record: SensorRecord):
         "model_version": "1.0.0"
     }
 
-@app.post("/predict_batch")
+@app.post("/predict_batch",
+        responses={
+        400: {"description": "Invalid input data"},
+        500: {"description": "Internal server error"}
+    }
+)
 def predict_batch(payload: BatchInput):
     """
     Predicts anomalies for a batch of sensor records.

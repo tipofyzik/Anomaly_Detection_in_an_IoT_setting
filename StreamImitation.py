@@ -19,26 +19,33 @@ Usage:
 
 import time, requests, random
 
-predict_batch = False
+predict_batch = True
 URL = "http://localhost:8000/predict"
 if predict_batch:
     URL = "http://localhost:8000/predict_batch"
 
-def generate_random_payload() -> dict[str, float]:
+Health_URL = "http://localhost:8000/health"
+Metrics_URL = "http://localhost:8000/metrics"
+batch_size = 3
+
+def generate_random_payload(batch_size = batch_size) -> list[dict[str, float]]:
     """
     Generates a random sensor measurement payload.
 
+    Args:
+        batch_size (int, optional): Number of records to generate for batch prediction.
+
     Returns:
-        dict[str, float]: Dictionary containing:
+        list[dict[str, float]]: List of dictionaries, each containing:
             - temperature (float): Random temperature between 60 and 80
             - humidity (float): Random humidity between 40 and 60
             - sound_volume (float): Random sound volume between 50 and 70
     """
-    return {
-        "temperature": random.uniform(60, 80),
-        "humidity": random.uniform(40, 60),
-        "sound_volume": random.uniform(50, 70)
-    }
+    return [{
+        "temperature": random.Random().uniform(63, 78),
+        "humidity": random.Random().uniform(43, 58),
+        "sound_volume": random.Random().uniform(53, 68)} 
+        for _ in range(batch_size)]
 
 def main(stream_interval: float = 0.5) -> None:
     """
@@ -54,10 +61,26 @@ def main(stream_interval: float = 0.5) -> None:
     while True:
         payload = generate_random_payload()
         if predict_batch:
-            payload = {"records": [payload]}
+            payload = {"records": payload}
         try:
             response = requests.post(URL, json=payload, timeout=5)
-            print(response.json())
+            data = response.json()
+
+            # Print the response in a readable format
+            if predict_batch:
+                print(f"\n--- Batch of {len(data['results'])} records ---")
+                for i, rec in enumerate(data["results"], start=1):
+                    print(f"Record {i}: Temperature={rec['input']['temperature']:.2f}, "
+                          f"Humidity={rec['input']['humidity']:.2f}, "
+                          f"Sound={rec['input']['sound_volume']:.2f}, "
+                          f"Anomaly={rec['is_anomaly']}, Anomaly score={rec['anomaly_score']:.3f}")
+            else:
+                rec = data
+                print(f"Temperature={rec['input']['temperature']:.2f}, "
+                      f"Humidity={rec['input']['humidity']:.2f}, "
+                      f"Sound={rec['input']['sound_volume']:.2f}, "
+                      f"Anomaly={rec['is_anomaly']}, Anomaly score={rec['anomaly_score']:.3f}")
+
         except requests.RequestException as e:
             print(f"Request failed: {e}")
         time.sleep(stream_interval)

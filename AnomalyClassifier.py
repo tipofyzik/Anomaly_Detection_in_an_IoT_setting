@@ -14,6 +14,7 @@ import numpy as np
 import joblib
 
 
+
 class AnomalyClassifier:
     """
     A class for training, evaluating, and saving anomaly detection models.
